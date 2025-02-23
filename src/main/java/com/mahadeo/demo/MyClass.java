@@ -5,9 +5,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class MyClass {
+
     
+    private final Car car;
+
+    // @Autowired - deprecated from Spring 4.3
+    public MyClass(Car car) {
+        this.car = car;
+    }
+
     @GetMapping("hello")
     public String sayHello() {
-        return "Greetings from Spring Boot!";
+        return this.car.getCar() + " and Hello";
     }
 }
