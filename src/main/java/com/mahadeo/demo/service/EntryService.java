@@ -1,7 +1,11 @@
 package com.mahadeo.demo.service;
 
 import java.util.HashMap;
+import java.util.List;
+
 import org.springframework.stereotype.Service;
+
+import com.mahadeo.demo.Entity.User;
 
 @Service
 public class EntryService {
@@ -21,8 +25,8 @@ public class EntryService {
         return this.entries.get(id);
     }
 
-    public HashMap<Integer, User> getEntries() {
-        return this.entries;
+    public List<User> getEntries() {
+        return this.entries.values().stream().toList();
     }
 
     public void deleteEntry(int id) {

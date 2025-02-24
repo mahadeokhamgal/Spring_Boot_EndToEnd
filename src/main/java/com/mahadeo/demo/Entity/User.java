@@ -1,4 +1,4 @@
-package com.mahadeo.demo.service;
+package com.mahadeo.demo.Entity;
 
 public class User {
     private int id;
