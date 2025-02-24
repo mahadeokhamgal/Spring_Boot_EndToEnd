@@ -1,36 +1,43 @@
 package com.mahadeo.demo.service;
 
-import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.mahadeo.demo.Entity.User;
+import com.mahadeo.demo.repository.UserRepository;
 
 @Service
 public class EntryService {
-    HashMap<Integer, User> entries;
+
+    @Autowired
+    UserRepository userRepository;
     
     public EntryService() {
         System.out.println("EntryService created");
-        this.entries = new HashMap<>();
-        this.entries.put(1, new User(1, "John", "john.mendes@email.com"));
     }
 
     public void addEntry(User user) {
-        this.entries.put(user.getId(), user);
+        this.userRepository.save(user);
     }
 
-    public User getEntry(int id) {
-        return this.entries.get(id);
+    public void updateEntry(User user) {
+        this.userRepository.save(user);
+    }
+
+    public Optional<User> getEntry(ObjectId id) {
+        return this.userRepository.findById(id);
     }
 
     public List<User> getEntries() {
-        return this.entries.values().stream().toList();
+        return this.userRepository.findAll();
     }
 
-    public void deleteEntry(int id) {
-        this.entries.remove(id);
+    public void deleteEntry(ObjectId id) {
+        this.userRepository.deleteById(id);
     }
 
 }

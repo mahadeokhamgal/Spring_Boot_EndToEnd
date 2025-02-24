@@ -1,18 +1,29 @@
 package com.mahadeo.demo.Entity;
 
+import java.sql.Date;
+import java.time.LocalDate;
+
+import org.bson.types.ObjectId;
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "user")
 public class User {
-    private int id;
+    
+    @Id //uniq key
+    private ObjectId id;
     private String name;
     private String email;
+    private LocalDate date;
 
-    public User(int id, String name, String email) {
+    public User(ObjectId id, String name, String email) {
         this.id = id;
         this.name = name;
         this.email = email;
     }
 
     // Getters and setters
-    public int getId() {
+    public Object getId() {
         return id;
     }
 
@@ -22,5 +33,13 @@ public class User {
 
     public String getEmail() {
         return email;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }
