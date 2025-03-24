@@ -1,0 +1,69 @@
+# Annotations used
+# Spring boot specific
+@SpringBootApplication = @Configuration + @EnableAutoConfiguration + @ComponentScan
+@RestController = @Controller + @ResponseBody.
+@Component
+@Service
+@RequestMapping  - @GetMapping - @PostMapping - @PutMapping - @DeleteMapping - @PatchMapping
+Transactional() # enables rollback on service layer.
+Transactional(readOnly = true) # speeds up read-only operations.
+@Autowired  // Not required in Spring Boot 4+
+@PostConstruct
+@PreDestroy
+@Controller
+@ResponseBody
+@RequestBody
+@CrossOrigin(origins = "http://localhost:3000") // Allow frontend access
+@EnableCaching # on main class
+@Cacheable("cacheName")
+@CachePut("cacheName")
+@CacheEvict("cacheName")
+@Bean
+@Profile("dev")
+@Data
+@Setter
+@Getter
+
+@Entity Annotation in JPA
+    @Id  // Marks this field as the Primary Key
+    @GeneratedValue (strategy = GenerationType.IDENTITY) // Auto-increments the ID
+    @Table(name = "users")  // Custom table name
+    @Column(name = "full_name", nullable = false, length = 100)
+    @OneToMany(mappedBy = "user") // One user has many orders
+    @JoinColumn(name = "user_id")
+
+# Generic to java
+@Override
+@FunctionalInterface
+
+
+
+How the IoC Container Works
+Step by step What Happens?
+1️⃣ Bean Definition	@Component, @Service, @Repository mark classes as Spring-managed beans.
+2️⃣ Dependency Injection	@Autowired injects dependencies automatically.
+3️⃣ IoC Container Initialization	ApplicationContext starts and manages beans.
+4️⃣ Application Runs	Beans are available for use.
+5️⃣ IoC Container Shutdown	@PreDestroy cleans up resources before shutdown.
+
+@Component vs @Service vs @Repositoryvs @Controller vs @RestController
+🚀 When to Use What?
+✅ Use @Component when the bean does not fit @Service, @Repository, or @Controller.
+✅ Use @Service for business logic processing.
+✅ Use @Repository for database access and exception handling.
+✅ Use @Controller when building Spring MVC applications with views (HTML, JSP).
+✅ Use @RestController when building REST APIs that return JSON/XML.
+
+** Spring Boot loads Application properties from the following locations (in order of priority): **
+Command-line arguments (--server.port=8081)
+Environment variables
+application.properties or application.yml (inside src/main/resources/)
+External property files (config/ directory, /etc/config/)
+Java system properties (-Dserver.port=8081)
+Default values in @Value annotations or Java classes
+
+# To do.
+1. Caching in spring boot.
+2. Spring Security for authentication/authorization.
+3. Work with databases using JPA & Hibernate.
+4. Spring boot cli, dev tools.

@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.bson.types.ObjectId;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,35 +34,51 @@ public class EntryController {
     }
 
     @GetMapping
-    public List<User> getUsers() {
+    public ResponseEntity<List<User>> getUsers() {
         List<User> entries = this.entryService.getEntries();
-        System.out.println(entries);
-
-        return entries;
+        return new ResponseEntity<>(entries, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public Optional<User> getUser(@PathVariable ObjectId id) {
-        return this.entryService.getEntry(id);
+    public ResponseEntity<User> getUser(@PathVariable ObjectId id) {
+        Optional<User> user = this.entryService.getEntry(id);
+        if(user.isPresent()){
+            return new ResponseEntity<>(user.get(), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping
-    public boolean addUser(@RequestBody User user) {
-        user.setDate(LocalDate.now());
-        this.entryService.addEntry(user);
-        return true;
+    public ResponseEntity<User> addUser(@RequestBody User user) {
+        try {
+            user.setDate(LocalDate.now());
+            this.entryService.addEntry(user);
+            return new ResponseEntity<>(user, HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @DeleteMapping("/{id}")
-    public boolean deleteUser(@PathVariable ObjectId id) {
+    public ResponseEntity<?> deleteUser(@PathVariable ObjectId id) {
         this.entryService.deleteEntry(id);
-        return true;
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/{id}")
-    public boolean updateUser(@PathVariable int id, @RequestBody User user) {
-        this.entryService.updateEntry(user);
-        return true;
+    public ResponseEntity<?> updateUser(@PathVariable ObjectId id, @RequestBody User user) {
+        Optional<User> old = this.entryService.getEntry(id);
+        if(old.isPresent()){
+            try{
+                this.entryService.updateEntry(user);
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            } catch (Exception e) {
+                return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+        } else{
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostConstruct
